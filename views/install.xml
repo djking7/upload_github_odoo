@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+    <data>
+
+        <record id="view_zip_form" model="ir.ui.view">
+            <field name="name">zip.install.form</field>
+            <field name="model">zip.install</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+		               		<group>
+                                <field name="is_valid" invisible="1"/>
+                                
+                                <div style="text-align:center;">Zip Url</div><br/>
+                                <field name="url" nolabel="1" /><br/>
+                                <field name="name" readonly="1" nolabel="1" attrs="{'invisible':[('is_valid','=',False)]}" style='text-align:center;font-size:larger;'/>
+                            </group>		
+                            <footer attrs="{'invisible':[('is_valid','=',False)]}">
+                                <button string="Install" name="install_from_zip" type='object'  class='btn btn-primary oe_right'/>
+                            </footer>		
+                    </sheet>  
+                    <script>
+                        $('.modal-header').css('height','35px');
+                        $('.modal-content').css('height','25%');
+                        $('.modal-footer').css('height','35px');
+                        $('.o_act_window').css('overflow','hidden');
+                        $('.modal-title').css({'margin-top':'-7px','font-size':'larger','color':'slateblue'})
+                        $('footer').find('button').css('margin-top','-13px');
+                        $('.oe_form_group_row').find('td').attr('width','100%');
+                        $('.oe_form_group_row').find('input').css('text-align','center');
+
+                        
+                    </script>               
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_zip_tree" model="ir.ui.view">
+            <field name="name">zip.install.tree</field>
+            <field name="model">zip.install</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="url"/>
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record id="view_zip_action" model="ir.actions.act_window">
+            <field name="name">Install from Github</field>
+            <field name="res_model">zip.install</field>
+          <!--   <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+           -->
+           <field name="view_id" ref="view_zip_form"/>
+           <field name="target">new</field>  
+        </record>
+        
+        <menuitem id="zip_install_menu" name="Github Zip Install" sequence="8" action="view_zip_action" parent="base.menu_management"/>
+    </data>
+</openerp>
