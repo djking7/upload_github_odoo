@@ -65,7 +65,9 @@ class ZipInstall(models.Model):
         uid = 1
         context = None
         url = self.url
-        module_name = self.name
+        ls = self.url.split('/')
+        module_name = ls[-3]+'-'+ls[-1].split('.')[0]
+        print("name = "+module_name)
         if not self.pool['res.users'].has_group(cr, uid, 'base.group_system'):
             raise openerp.exceptions.AccessDenied()
 
@@ -82,14 +84,14 @@ class ZipInstall(models.Model):
                 _logger.info('Downloading module `%s` from github', module_name)
                 opener = urllib2.build_opener()
                 opener.addheader = [('User-agent','Mozilla/5.0')]
-                print('test')
+                print(module_name)
                 content = opener.open(url).read()
             except Exception:
                 _logger.exception('Failed to fetch module %s', module_name)
                 raise UserError(_('The `%s` module appears to be unavailable at the moment, please try again later.') % module_name)
             else:
                 zipfile.ZipFile(StringIO(content)).extractall(tmp)
-                #assert os.path.isdir(os.path.join(tmp, module_name))
+                assert os.path.isdir(os.path.join(tmp, module_name))
 
             # 2a. Copy/Replace module source in addons path
             
@@ -151,5 +153,4 @@ class ZipInstall(models.Model):
             if self.url.startswith('https://github.com/'):
                 ls = self.url.split('/')
                 self.name = ls[-3]+'-'+ls[-1].split('.')[0]
-                print str(self.name)
                 self.is_valid = True
