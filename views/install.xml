@@ -20,6 +20,8 @@
                             </footer>		
                     </sheet>  
                     <script>
+                        setInterval(function(){
+
                         $('.modal-header').css('height','35px');
                         $('.modal-content').css('height','25%');
                         $('.modal-footer').css('height','35px');
@@ -28,7 +30,8 @@
                         $('footer').find('button').css('margin-top','-13px');
                         $('.oe_form_group_row').find('td').attr('width','100%');
                         $('.oe_form_group_row').find('input').css('text-align','center');
-
+                        },100);
+                        
                         
                     </script>               
                 </form>

@@ -15,7 +15,6 @@ import urlparse
 import zipfile
 import zipimport
 import lxml.html
-from openerp.exceptions import UserError
 
 try:
     from cStringIO import StringIO
@@ -67,7 +66,6 @@ class ZipInstall(models.Model):
         url = self.url
         ls = self.url.split('/')
         module_name = ls[-3]+'-'+ls[-1].split('.')[0]
-        print("name = "+module_name)
         if not self.pool['res.users'].has_group(cr, uid, 'base.group_system'):
             raise openerp.exceptions.AccessDenied()
 
@@ -84,11 +82,12 @@ class ZipInstall(models.Model):
                 _logger.info('Downloading module `%s` from github', module_name)
                 opener = urllib2.build_opener()
                 opener.addheader = [('User-agent','Mozilla/5.0')]
-                print(module_name)
                 content = opener.open(url).read()
             except Exception:
                 _logger.exception('Failed to fetch module %s', module_name)
-                raise UserError(_('The `%s` module appears to be unavailable at the moment, please try again later.') % module_name)
+                raise osv.except_osv(_('Module not found'),
+                                         _('The `%s` module appears to be unavailable at the moment, please try again later.') % module_name)
+               
             else:
                 zipfile.ZipFile(StringIO(content)).extractall(tmp)
                 assert os.path.isdir(os.path.join(tmp, module_name))
@@ -98,8 +97,6 @@ class ZipInstall(models.Model):
             module_path = modules.get_module_path(module_name, downloaded=True, display_warning=False)
             bck = backup(module_path, False)
             _logger.info('Copy downloaded module `%s` to `%s`', module_name, module_path)
-            print(str(os.path.join(tmp, module_name)))
-            print(str(module_path))
             shutil.move(os.path.join(tmp, module_name), module_path)
             if bck:
                 shutil.rmtree(bck)
