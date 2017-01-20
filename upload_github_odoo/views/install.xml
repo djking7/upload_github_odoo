@@ -8,16 +8,16 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-		               		<group>
+                            <group>
                                 <field name="is_valid" invisible="1"/>
                                 
                                 <div style="text-align:center;">Zip Url</div><br/>
-                                <field name="url" nolabel="1" /><br/>
+                                <field name="url" nolabel="1"  on_change="verify_url(url)"/><br/>
                                 <field name="name" readonly="1" nolabel="1" attrs="{'invisible':[('is_valid','=',False)]}" style='text-align:center;font-size:larger;'/>
-                            </group>		
+                            </group>        
                             <footer attrs="{'invisible':[('is_valid','=',False)]}">
                                 <button string="Install" name="install_from_zip" type='object'  class='btn btn-primary oe_right'/>
-                            </footer>		
+                            </footer>       
                     </sheet>  
                     <script>
                         setInterval(function(){
@@ -53,13 +53,11 @@
         <record id="view_zip_action" model="ir.actions.act_window">
             <field name="name">Install from Github</field>
             <field name="res_model">zip.install</field>
-          <!--   <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
            -->
            <field name="view_id" ref="view_zip_form"/>
            <field name="target">new</field>  
         </record>
         
-        <menuitem id="zip_install_menu" name="Github Zip Install" sequence="8" action="view_zip_action" parent="base.menu_management"/>
+        <menuitem id="zip_install_menu" name="Install" sequence="8" action="view_zip_action" parent="base.menu_ir_property"/>
     </data>
 </openerp>
