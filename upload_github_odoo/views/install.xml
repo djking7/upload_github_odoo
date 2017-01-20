@@ -53,11 +53,10 @@
         <record id="view_zip_action" model="ir.actions.act_window">
             <field name="name">Install from Github</field>
             <field name="res_model">zip.install</field>
-           -->
            <field name="view_id" ref="view_zip_form"/>
            <field name="target">new</field>  
         </record>
         
-        <menuitem id="zip_install_menu" name="Install" sequence="8" action="view_zip_action" parent="base.menu_ir_property"/>
+        <menuitem id="zip_install_menu" name="Install" sequence="8" action="view_zip_action" parent="base.menu_ir_property" groups="base.group_system"/>
     </data>
 </openerp>
