@@ -8,30 +8,29 @@
             <field name="arch" type="xml">
                 <form>
                     <sheet>
-                            <group>
+		               		<group>
                                 <field name="is_valid" invisible="1"/>
                                 
                                 <div style="text-align:center;">Zip Url</div><br/>
-                                <field name="url" nolabel="1"  on_change="verify_url(url)"/><br/>
+                                <field name="url" nolabel="1" /><br/>
                                 <field name="name" readonly="1" nolabel="1" attrs="{'invisible':[('is_valid','=',False)]}" style='text-align:center;font-size:larger;'/>
-                            </group>        
+                            </group>		
                             <footer attrs="{'invisible':[('is_valid','=',False)]}">
-                                <button string="Install" name="install_from_zip" type='object'  class='btn btn-primary oe_right'/>
-                            </footer>       
+                                <button string="Install" name="install_from_zip" type='object'  class='btn btn-primary pull-right'/>
+                            </footer>		
                     </sheet>  
                     <script>
-                        setInterval(function(){
-
                         $('.modal-header').css('height','35px');
                         $('.modal-content').css('height','25%');
                         $('.modal-footer').css('height','35px');
                         $('.o_act_window').css('overflow','hidden');
                         $('.modal-title').css({'margin-top':'-7px','font-size':'larger','color':'slateblue'})
                         $('footer').find('button').css('margin-top','-13px');
-                        $('.oe_form_group_row').find('td').attr('width','100%');
-                        $('.oe_form_group_row').find('input').css('text-align','center');
-                        },100);
-                        
+                        $('.o_inner_group').find('td').css('width','100%');
+                        $('.o_form_input').css('text-align','center');
+                        $('.o_form_input').css('margin-left','22px');
+                        $('.o_inner_group').find('td').css('text-align','center');
+
                         
                     </script>               
                 </form>
