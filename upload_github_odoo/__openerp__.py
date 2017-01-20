@@ -8,6 +8,6 @@
     "installable": True,
     "category": "",
     "depends": ['base'],
-    "data":[
+    "data":["views/install.xml"
     ]
 }
