@@ -113,13 +113,14 @@ class ZipInstall(models.Model):
 
             self.env['ir.module.module'].update_list()
 
-            downloaded_ids = self.env['ir.module.module'].search([('name', '=', module_name)])
-            already_installed = self.env['ir.module.module'].search([('id', 'in', [id for u.id in downloaded_ids]), ('state', '=', 'installed')])
+            downloaded = self.env['ir.module.module'].search([('name', '=', module_name)])
+            installed = self.env['ir.module.module'].search([('id', 'in', downloaded.ids), ('state', '=', 'installed')])
 
-            to_install_ids = self.env['ir.module.module'].search([('name', '=', module_name), ('state', '=', 'uninstalled')])
-            post_install_action = self.env['ir.module.module'].button_immediate_install()
+            to_install = self.env['ir.module.module'].search([('name', '=', module_name), ('state', '=', 'uninstalled')])
+            post_install_action = to_install.button_immediate_install()
 
-            if already_installed:
+
+            if installed or to_install:
                 # in this case, force server restart to reload python code...
                 cr.commit()
                 odoo.service.server.restart()
@@ -207,13 +208,13 @@ class ZipInstall(models.Model):
 
             self.env['ir.module.module'].update_list()
 
-            downloaded_ids = self.env['ir.module.module'].search([('name', '=', module_name)])
-            already_installed = self.env['ir.module.module'].search([('id', 'in', [id for u.id in downloaded_ids]), ('state', '=', 'installed')])
+            downloaded = self.env['ir.module.module'].search([('name', '=', module_name)])
+            installed = self.env['ir.module.module'].search([('id', 'in', downloaded.ids), ('state', '=', 'installed')])
 
-            to_install_ids = self.env['ir.module.module'].search([('name', '=', module_name), ('state', '=', 'uninstalled')])
-            post_install_action = self.env['ir.module.module'].button_immediate_install()
+            to_install = self.env['ir.module.module'].search([('name', '=', module_name), ('state', '=', 'uninstalled')])
+            post_install_action = to_install.button_immediate_install()
 
-            if already_installed:
+            if installed or to_install:
                 # in this case, force server restart to reload python code...
                 cr.commit()
                 odoo.service.server.restart()
