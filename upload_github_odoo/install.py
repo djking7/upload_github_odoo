@@ -2,9 +2,8 @@ from docutils import nodes
 from docutils.core import publish_string
 from docutils.transforms import Transform, writer_aux
 from docutils.writers.html4css1 import Writer
-import importlib
+import imp
 import logging
-from operator import attrgetter
 import os
 import re
 import shutil
@@ -14,7 +13,6 @@ import urllib2
 import urlparse
 import zipfile
 import zipimport
-import lxml.html
 
 try:
     from cStringIO import StringIO
@@ -23,18 +21,12 @@ except ImportError:
 
 import openerp
 import openerp.exceptions
-from openerp import modules, tools
+from openerp import modules, pooler, tools, addons
 from openerp.modules.db import create_categories
-from openerp.modules import get_module_resource
-from openerp.tools import ormcache
 from openerp.tools.parse_version import parse_version
 from openerp.tools.translate import _
-from openerp.tools import html_sanitize
-from openerp.osv import osv, orm, fields
-from openerp import api, fields as fields2
-import base64
-from openerp import api, fields, models, _
-    
+from openerp.osv import fields, osv, orm
+
 _logger = logging.getLogger(__name__)
 
 def backup(path, raise_exception=True):
@@ -51,12 +43,12 @@ def backup(path, raise_exception=True):
             return bck
         cnt += 1
 
-class ZipInstall(models.Model):
+class ZipInstall(osv.osv):
     _name = "zip.install"
 
-    name = fields.Char()
-    url = fields.Char()
-    is_valid = fields.Boolean(default=False)
+    name = fields.char()
+    url = fields.char()
+    is_valid = fields.boolean(default=False)
 
     
     def install_from_zip(self, cr, uid,ids, context=None):
@@ -124,11 +116,11 @@ class ZipInstall(models.Model):
 
             self.pool['ir.module.module'].update_list(cr, uid, context=context)
 
-            downloaded_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name)], context=context)
-            already_installed = self.pool['ir.module.module'].search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
+            downloaded_ids = self.search(cr, uid, [('name', '=', module_name)], context=context)
+            already_installed = self.search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
 
-            to_install_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
-            post_install_action = self.pool['ir.module.module'].button_immediate_install(cr, uid, to_install_ids, context=context)
+            to_install_ids = self.search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
+            post_install_action = self.button_immediate_install(cr, uid, to_install_ids, context=context)
 
             if already_installed:
                 # in this case, force server restart to reload python code...
@@ -218,11 +210,11 @@ class ZipInstall(models.Model):
 
             self.pool['ir.module.module'].update_list(cr, uid, context=context)
 
-            downloaded_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name)], context=context)
-            already_installed = self.pool['ir.module.module'].search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
+            downloaded_ids = self.search(cr, uid, [('name', '=', module_name)], context=context)
+            already_installed = self.search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
 
-            to_install_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
-            post_install_action = self.pool['ir.module.module'].button_immediate_install(cr, uid, to_install_ids, context=context)
+            to_install_ids = self.search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
+            post_install_action = self.button_immediate_install(cr, uid, to_install_ids, context=context)
 
             if already_installed:
                 # in this case, force server restart to reload python code...
