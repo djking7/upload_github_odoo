@@ -2,7 +2,7 @@
     "name": "Zip Install",
     "summary": "Install zip file from github",
     "description": "",
-    "author": "Foulen",
+    "author": "King",
     "website": "github.com/djking7",
     "application": True,
     "installable": True,
