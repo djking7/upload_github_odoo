@@ -6,7 +6,7 @@
             <field name="name">zip.install.form</field>
             <field name="model">zip.install</field>
             <field name="arch" type="xml">
-                <form>
+                <form string='github' version="7.0">
                     <sheet>
                             <group>
                                 <field name="is_valid" invisible="1"/>

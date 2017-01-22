@@ -64,7 +64,7 @@ class ZipInstall(osv.osv):
 
         apps_server = urlparse.urlparse(self.pool['ir.module.module'].get_apps_server(cr, uid, context=context))
 
-        OPENERP = openerp.release.product_name.lower()
+        OPENERP = 'openerp'
         tmp = tempfile.mkdtemp()
         _logger.debug('Install from zip: %r', url)
         try:
@@ -116,11 +116,11 @@ class ZipInstall(osv.osv):
 
             self.pool['ir.module.module'].update_list(cr, uid, context=context)
 
-            downloaded_ids = self.search(cr, uid, [('name', '=', module_name)], context=context)
-            already_installed = self.search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
+            downloaded_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name)], context=context)
+            already_installed = self.pool['ir.module.module'].search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
 
-            to_install_ids = self.search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
-            post_install_action = self.button_immediate_install(cr, uid, to_install_ids, context=context)
+            to_install_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
+            post_install_action = self.pool['ir.module.module'].button_immediate_install(cr, uid, to_install_ids, context=context)
 
             if already_installed:
                 # in this case, force server restart to reload python code...
@@ -158,7 +158,7 @@ class ZipInstall(osv.osv):
 
         apps_server = urlparse.urlparse(self.pool['ir.module.module'].get_apps_server(cr, uid, context=context))
 
-        OPENERP = openerp.release.product_name.lower()
+        OPENERP = 'openerp'
         tmp = tempfile.mkdtemp()
         _logger.debug('Install from zip: %r', url)
         try:
@@ -210,11 +210,11 @@ class ZipInstall(osv.osv):
 
             self.pool['ir.module.module'].update_list(cr, uid, context=context)
 
-            downloaded_ids = self.search(cr, uid, [('name', '=', module_name)], context=context)
-            already_installed = self.search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
+            downloaded_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name)], context=context)
+            already_installed = self.pool['ir.module.module'].search(cr, uid, [('id', 'in', downloaded_ids), ('state', '=', 'installed')], context=context)
 
-            to_install_ids = self.search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
-            post_install_action = self.button_immediate_install(cr, uid, to_install_ids, context=context)
+            to_install_ids = self.pool['ir.module.module'].search(cr, uid, [('name', '=', module_name), ('state', '=', 'uninstalled')], context=context)
+            post_install_action = self.pool['ir.module.module'].button_immediate_install(cr, uid, to_install_ids, context=context)
 
             if already_installed:
                 # in this case, force server restart to reload python code...
