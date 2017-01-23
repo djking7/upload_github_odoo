@@ -62,8 +62,6 @@ class ZipInstall(osv.osv):
         if not self.pool['res.users'].has_group(cr, uid, 'base.group_system'):
             raise openerp.exceptions.AccessDenied()
 
-        apps_server = urlparse.urlparse(self.pool['ir.module.module'].get_apps_server(cr, uid, context=context))
-
         OPENERP = 'openerp'
         tmp = tempfile.mkdtemp()
         _logger.debug('Install from zip: %r', url)
@@ -155,8 +153,6 @@ class ZipInstall(osv.osv):
         module_name = ls[-3]+'-'+ls[-1].split('.')[0]
         if not self.pool['res.users'].has_group(cr, uid, 'base.group_system'):
             raise openerp.exceptions.AccessDenied()
-
-        apps_server = urlparse.urlparse(self.pool['ir.module.module'].get_apps_server(cr, uid, context=context))
 
         OPENERP = 'openerp'
         tmp = tempfile.mkdtemp()
