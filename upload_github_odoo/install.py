@@ -125,7 +125,7 @@ class ZipInstall(osv.osv):
                 cr.commit()
                 try :
                     openerp.service.restart_server()
-                Exception:
+                except:
                     openerp.service.server.restart()
                 return {
                     'type': 'ir.actions.client',
